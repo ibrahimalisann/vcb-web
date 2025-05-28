@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, IconButton } from '@mui/material';
-import { Home as HomeIcon, BarChart as BarChartIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { Home as HomeIcon, BarChart as BarChartIcon, Logout as LogoutIcon, Menu as MenuIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
 
@@ -8,6 +8,8 @@ function Navbar() {
   const navigate = useNavigate();
   const auth = getAuth();
   const [user, setUser] = useState<User | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -17,6 +19,19 @@ function Navbar() {
     return () => unsubscribe();
   }, [auth]);
 
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    handleClose();
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -24,6 +39,7 @@ function Navbar() {
     } catch (error) {
       console.error('Çıkış yapılırken hata oluştu:', error);
     }
+    handleClose();
   };
 
   // Kullanıcı giriş yapmamışsa navbar'ı gösterme
@@ -34,9 +50,9 @@ function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar sx={{ 
-        flexDirection: { xs: 'column', sm: 'row' }, 
-        alignItems: { xs: 'flex-start', sm: 'center' }, 
-        gap: { xs: 1, sm: 2 }, 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         px: { xs: 1, sm: 2 } 
       }}>
         <Typography 
@@ -45,23 +61,18 @@ function Navbar() {
           sx={{ 
             flexGrow: 1, 
             fontSize: { xs: 18, sm: 24 }, 
-            mb: { xs: 1, sm: 0 } 
           }}
         >
           Mavera Dijital
         </Typography>
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: { xs: 'column', sm: 'row' }, 
-          width: { xs: '100%', sm: 'auto' }, 
-          gap: 1 
-        }}>
+        
+        {/* Büyük ekranlar için linkler */}
+        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1 }}>
           <Button 
             color="inherit" 
             component={Link} 
             to="/" 
             startIcon={<HomeIcon />} 
-            fullWidth={true} 
             sx={{ minWidth: 120 }}
           >
             Ana Sayfa
@@ -71,7 +82,6 @@ function Navbar() {
             component={Link} 
             to="/dashboard" 
             startIcon={<BarChartIcon />} 
-            fullWidth={true} 
             sx={{ minWidth: 120 }}
           >
             Dashboard
@@ -81,7 +91,6 @@ function Navbar() {
             component={Link} 
             to="/hedef-nisbet" 
             startIcon={<BarChartIcon />} 
-            fullWidth={true} 
             sx={{ minWidth: 120 }}
           >
             Günlük Hedef Nisbeti
@@ -91,7 +100,6 @@ function Navbar() {
             component={Link} 
             to="/gunluk-artis" 
             startIcon={<BarChartIcon />} 
-            fullWidth={true} 
             sx={{ minWidth: 120 }}
           >
             Günlük Artış Yüzdesi
@@ -100,7 +108,6 @@ function Navbar() {
             color="inherit" 
             onClick={handleLogout}
             startIcon={<LogoutIcon />}
-            fullWidth={true}
             sx={{ 
               minWidth: 120,
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -111,6 +118,42 @@ function Navbar() {
           >
             Çıkış Yap
           </Button>
+        </Box>
+
+        {/* Mobil görünüm için menü ikonu ve menü */}
+        <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
+          <IconButton
+            size="large"
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleMenu}
+            aria-controls={open ? 'menu-appbar' : undefined}
+            aria-haspopup="true"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => handleNavigation('/')}>Ana Sayfa</MenuItem>
+            <MenuItem onClick={() => handleNavigation('/dashboard')}>Dashboard</MenuItem>
+            <MenuItem onClick={() => handleNavigation('/hedef-nisbet')}>Günlük Hedef Nisbeti</MenuItem>
+            <MenuItem onClick={() => handleNavigation('/gunluk-artis')}>Günlük Artış Yüzdesi</MenuItem>
+            <MenuItem onClick={handleLogout}>Çıkış Yap</MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>

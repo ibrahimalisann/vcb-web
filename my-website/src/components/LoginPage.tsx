@@ -48,11 +48,17 @@ function LoginPage() {
         });
 
         console.log('Giriş başarılı:', result.user);
-        navigate('/dashboard');
+        navigate('/');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Giriş hatası:', error);
-      setError('Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.');
+      if (error.code === 'auth/unauthorized-domain') {
+        setError('Bu domain için giriş yetkisi yok. Lütfen yönetici ile iletişime geçin.');
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        setError('Giriş penceresi kapatıldı. Lütfen tekrar deneyin.');
+      } else {
+        setError('Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.');
+      }
     } finally {
       setLoading(false);
     }

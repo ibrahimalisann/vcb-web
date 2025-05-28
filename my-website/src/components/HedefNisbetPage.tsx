@@ -69,7 +69,7 @@ console.log("hedef nisbet page");
 
   // Tablo başlıklarını oluştur: AD SOYAD ve günler
   const tableHeaders = [
-    'AD SOYAD',
+    'Ad Soyad',
     'PersonelNO', // PersonelNO'yu da gösterelim
     ...tarihler.map((tarih, index) => `${index + 1}. Gün (${tarih})`),
     'Artış (%)'

@@ -32,7 +32,7 @@ type TableRowType = string[];
 // Günlük Artış Yüzdesi sayfası için başlıklar
 const GUNLUK_ARTIS_TABLE_HEADERS = [
   'PersonelNO',
-  'AD SOYAD',
+  'Ad Soyad',
   'Son Gün',
   'Bir Önceki Gün',
   'Artış (%)',

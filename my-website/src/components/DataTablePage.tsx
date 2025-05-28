@@ -4,7 +4,6 @@ import { Add as AddIcon, Delete as DeleteIcon, Upload as UploadIcon } from '@mui
 import { createPersonel, createHedefNisbet, createGunlukArtis, deletePersonel } from '../lib/firebase';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore';
-import * as XLSX from 'xlsx';
 
 type TableRowType = string[];
 
@@ -123,23 +122,6 @@ function DataTablePage({ rows }: { rows: TableRowType[] }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const readExcelFile = (file: File): Promise<XLSX.WorkBook> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = e.target?.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
-          resolve(workbook);
-        } catch (error) {
-          reject(error);
-        }
-      };
-      reader.onerror = (error) => reject(error);
-      reader.readAsBinaryString(file);
-    });
   };
 
   const handleBulkAdd = async () => {

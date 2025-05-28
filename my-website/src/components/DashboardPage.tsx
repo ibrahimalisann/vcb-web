@@ -138,27 +138,27 @@ function DashboardPage({ rows }: { rows: TableRowType[] }) {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4, justifyContent: 'center' }}>
-          <Box sx={{ minWidth: 220, p: 3, bgcolor: '#e3f2fd', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Toplam Personel</Typography>
             <Typography variant="h5" color="primary" fontWeight={700}>{kisiSayisi}</Typography>
           </Box>
-          <Box sx={{ minWidth: 220, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Toplam Gün</Typography>
             <Typography variant="h5" color="primary" fontWeight={700}>{gunSayisi}</Typography>
           </Box>
-          <Box sx={{ minWidth: 220, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Son Gün HEDEF NİSBETİ Ortalaması</Typography>
             <Typography variant="h5" color="primary" fontWeight={700}>%{ortalama.toFixed(1)}</Typography>
           </Box>
-          <Box sx={{ minWidth: 220, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Günlük Artış Ortalaması</Typography>
             <Typography variant="h5" color="primary" fontWeight={700}>%{gunlukArtisOrtalama.toFixed(1)}</Typography>
           </Box>
-          <Box sx={{ minWidth: 220, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Son Kaç Gün Kaldı</Typography>
             <Typography variant="h5" color="primary" fontWeight={700}>{kalanGun}</Typography>
           </Box>
-          <Box sx={{ minWidth: 320, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 320, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
               Genel HEDEF NİSBETİ Ortalaması
             </Typography>
@@ -169,28 +169,41 @@ function DashboardPage({ rows }: { rows: TableRowType[] }) {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4, justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ minWidth: 320, p: 3, bgcolor: '#e8f5e9', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
+          <Box sx={{ minWidth: 320, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1 }}>
             <Typography variant="subtitle2" color="text.secondary">Son Günün Lideri</Typography>
             <Typography variant="h6" color="primary" fontWeight={700}>{gununLideri?.ad || '-'}</Typography>
             <Typography variant="body2" color="text.secondary">
               Artış: {gununLideri ? `%${gununLideri.artis.toFixed(1)}` : '%0.0'}
             </Typography>
           </Box>
-          <Box sx={{ minWidth: 320, height: 220, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ minWidth: 320, height: 220, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>Günlük Artış Dağılımı</Typography>
             <ResponsiveContainer width="100%" height={120}>
               <PieChart>
-                <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={40} label>
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                <Pie
+                  data={[
+                    { name: 'Üstünde', value: ustunde, color: '#4caf50' },
+                    { name: 'Altında', value: altinda, color: '#f44336' }
+                  ]}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={30}
+                  outerRadius={50}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {[
+                    { name: 'Üstünde', value: ustunde, color: '#4caf50' },
+                    { name: 'Altında', value: altinda, color: '#f44336' }
+                  ].map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </Box>
-          <Box sx={{ minWidth: 320, p: 3, bgcolor: '#f5f5f5', borderRadius: 2, textAlign: 'center', boxShadow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ minWidth: 320, p: 3, bgcolor: 'white', borderRadius: 2, textAlign: 'center', boxShadow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>Ortalama Karşılaştırması</Typography>
             <Typography variant="body1" color="success.main" fontWeight={700}>Üstünde: {ustunde} kişi</Typography>
             <Typography variant="body1" color="error.main" fontWeight={700}>Altında: {altinda} kişi</Typography>
